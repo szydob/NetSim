@@ -1,0 +1,10 @@
+# ninja log v5
+18	296	7235633695293221	lib/libgmock.a	2ce52922e9bd5d8d
+56	4955	7235601982365222	googletest-master/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj	f4224bab64f0aa8e
+33	2026	7235633506462064	lib/libgtest.a	9e28a597f7f5e105
+437	9511	7235602027892391	googletest-master/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	b4d8a656090470fd
+5	67	7235659230088017	CMakeFiles/NetSim.dir/src/helpers.cpp.obj	f9828bdfe3f3a2b2
+0	68	7235659230103094	CMakeFiles/NetSim.dir/main.cpp.obj	9f58480c5ecdad8e
+12	73	7235659230153173	CMakeFiles/NetSim.dir/src/nodes.cpp.obj	5bd1b6500634784f
+9	270	7235659232125628	CMakeFiles/NetSim.dir/src/package.cpp.obj	e367bcf61968bb39
+17	450	7235659233928634	CMakeFiles/NetSim.dir/src/storage_types.cpp.obj	7f766078212cd30c
