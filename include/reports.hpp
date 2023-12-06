@@ -1,0 +1,4 @@
+#ifndef LAB6_REPORTS_HPP
+#define LAB6_REPORTS_HPP
+
+#endif //LAB6_REPORTS_HPP

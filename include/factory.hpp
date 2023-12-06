@@ -1,0 +1,4 @@
+#ifndef LAB6_FACTORY_HPP
+#define LAB6_FACTORY_HPP
+
+#endif //LAB6_FACTORY_HPP
