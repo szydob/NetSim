@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(lab6)
+project(NetSim)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -15,7 +15,7 @@ set(SOURCE_FILES
         src/storage_types.cpp
         )
 
-add_executable(lab6 ${SOURCE_FILES} main.cpp)
+add_executable(NetSim ${SOURCE_FILES} main.cpp)
 
 set(SOURCES_FILES_TESTS
         test/main_gtest.cpp
@@ -24,9 +24,9 @@ set(SOURCES_FILES_TESTS
         test/test_storage_types.cpp
         )
 
-add_executable(lab6_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
+add_executable(NetSim_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
 
-target_include_directories(lab6_test PUBLIC
+target_include_directories(NetSim_test PUBLIC
         googletest-master/googlemock/include
         googletest-master/googletest/include
         mocks
@@ -34,6 +34,6 @@ target_include_directories(lab6_test PUBLIC
 
 add_subdirectory(googletest-master)
 
-target_link_libraries(lab6_test gmock)
+target_link_libraries(NetSim_test gmock)
 
-target_compile_definitions(lab6_test PUBLIC EXERCISE_ID=EXERCISE_ID_NODES)
+target_compile_definitions(NetSim_test PUBLIC EXERCISE_ID=EXERCISE_ID_NODES)
