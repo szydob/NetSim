@@ -7,7 +7,7 @@ class Package {
 public:
     Package();
 
-    explicit Package(ElementID ID) : ID_(ID) {}
+    explicit Package(ElementID ID) : ID_(ID) {assigned_IDs.insert(ID_);}
     Package(Package &&pack)  noexcept : ID_(pack.ID_) {}
     Package &operator=(Package &&pack) noexcept;
     ElementID get_id() const {return ID_;}
