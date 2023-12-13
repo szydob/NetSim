@@ -9,9 +9,11 @@
 #include "helpers.hpp"
 #include "package.hpp"
 #include "storage_types.hpp"
+#include "config.hpp"
 #include <map>
 #include <optional>
-
+#include <memory>
+#include <utility>
 
 class IPackageReceiver {
 public:
@@ -98,7 +100,7 @@ class Worker : public PackageSender, public IPackageReceiver{
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q) : PackageSender(), id_(id), pd_(pd), q_(std::move(q)) {}
 
-    void do_word(Time t);
+    void do_work(Time t);
 
     TimeOffset  get_processing_duration() const { return pd_; }
 
@@ -125,7 +127,7 @@ private:
 
 class Storehouse : public IPackageReceiver{
 public:
-    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = std::make_unique<PackageQueue>(PackageQueueType::LIFO)) : id_(id), d_(std::move(d)) {}
+    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = std::make_unique<PackageQueue>(PackageQueueType::FIFO)) : id_(id), d_(std::move(d)) {}
 
     ElementID get_id() const override { return id_; }
 
