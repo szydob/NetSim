@@ -1,0 +1,1 @@
+-IC:/Users/szydo/Desktop/NetSim/include -IC:/Users/szydo/Desktop/NetSim/mocks -isystem "C:/Users/szydo/Desktop/NetSim/googletest-master/googlemock/include" -isystem "C:/Users/szydo/Desktop/NetSim/googletest-master/googletest/include" -isystem "C:/Users/szydo/Desktop/NetSim/googletest-master/googlemock" -isystem "C:/Users/szydo/Desktop/NetSim/googletest-master/googletest"
