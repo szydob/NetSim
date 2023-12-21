@@ -29,6 +29,9 @@ public:
 
     virtual IPackageStockpile::const_iterator end() const = 0;
 
+    #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
+    virtual ReceiverType get_receiver_type() const = 0;
+    #endif
     virtual  ~IPackageReceiver() = default;
 };
 
@@ -63,6 +66,8 @@ private:
 
 class PackageSender {
 public:
+    ReceiverPreferences receiver_preferences_;
+
     PackageSender() = default;
 
     PackageSender(PackageSender&& sender) = default;
@@ -75,7 +80,6 @@ protected:
     void push_package(Package&& package) { bufor_.emplace(package.get_id()); };
 
 private:
-    ReceiverPreferences receiver_preferences_;
     std::optional<Package> bufor_ = std::nullopt;
 };
 
@@ -117,6 +121,10 @@ public:
     void receive_package(Package&& p) override;
 
     ElementID get_id() const override { return id_; }
+
+    #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
+        ReceiverType get_receiver_type() const override { return ReceiverType::WORKER; }
+    #endif
 private:
     ElementID id_;
     TimeOffset pd_;
@@ -140,6 +148,10 @@ public:
     IPackageStockpile::const_iterator cend() const override { return d_->cend(); }
 
     IPackageStockpile::const_iterator end() const override { return d_->end();  }
+
+    #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
+        ReceiverType get_receiver_type() const override { return ReceiverType::STOREHOUSE; }
+    #endif
 
 private:
     ElementID id_;
