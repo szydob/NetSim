@@ -15,6 +15,10 @@
 #include <memory>
 #include <utility>
 
+enum ReceiverType{
+    WORKER, STOREHOUSE
+};
+
 class IPackageReceiver {
 public:
     virtual void receive_package(Package&& p) = 0;
@@ -29,9 +33,9 @@ public:
 
     virtual IPackageStockpile::const_iterator end() const = 0;
 
-    #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
+
     virtual ReceiverType get_receiver_type() const = 0;
-    #endif
+
     virtual  ~IPackageReceiver() = default;
 };
 
@@ -59,6 +63,7 @@ public:
 
     const_iterator end() const { return preferences_.cend(); }
 
+    ~ReceiverPreferences() = default;
 private:
     preferences_t preferences_;
     ProbabilityGenerator pg_;
@@ -76,8 +81,9 @@ public:
 
     const std::optional<Package>& get_sending_buffer() const { return bufor_; }
 
+    ~PackageSender() = default;
 protected:
-    void push_package(Package&& package) { bufor_.emplace(package.get_id()); };
+    void push_package(Package&& package);
 
 private:
     std::optional<Package> bufor_ = std::nullopt;
@@ -85,7 +91,13 @@ private:
 
 class Ramp : public PackageSender {
 public:
-    Ramp(ElementID id, TimeOffset di) : PackageSender(), id_(id), di_(di) {}
+    explicit Ramp(ElementID id, TimeOffset di) : PackageSender(), id_(id), di_(di) {}
+
+    Ramp(Ramp&& ramp) = default;
+
+    Ramp(const Ramp &ramp);
+
+    Ramp& operator=(const Ramp &ramp) noexcept;
 
     void deliver_goods(Time t);
 
@@ -93,18 +105,26 @@ public:
 
     ElementID get_id() const { return id_; }
 
+    ~Ramp() = default;
 private:
     ElementID id_;
     TimeOffset di_;
-    Time t_;
     std::optional<Package> bufor_ = std::nullopt;
 };
 
 class Worker : public PackageSender, public IPackageReceiver{
 public:
-    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q) : PackageSender(), id_(id), pd_(pd), q_(std::move(q)) {}
+    explicit Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q) : PackageSender(), id_(id), pd_(pd), q_(std::move(q)) {}
 
     void do_work(Time t);
+
+    Worker() = default;
+
+    Worker(Worker&& worker) = default;
+
+    Worker(const Worker &worker);
+
+    Worker& operator=(const Worker &worker) noexcept;
 
     TimeOffset  get_processing_duration() const { return pd_; }
 
@@ -122,10 +142,15 @@ public:
 
     ElementID get_id() const override { return id_; }
 
-    #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
-        ReceiverType get_receiver_type() const override { return ReceiverType::WORKER; }
-    #endif
+
+    ReceiverType get_receiver_type() const override { return receiverType_; }
+
+
+    IPackageQueue* get_queue() const { return q_.get(); }
+
+    ~Worker() = default;
 private:
+    ReceiverType receiverType_ = WORKER;
     ElementID id_;
     TimeOffset pd_;
     Time t_;
@@ -135,7 +160,13 @@ private:
 
 class Storehouse : public IPackageReceiver{
 public:
-    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = std::make_unique<PackageQueue>(PackageQueueType::FIFO)) : id_(id), d_(std::move(d)) {}
+    explicit Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = std::make_unique<PackageQueue>(PackageQueueType::FIFO)) : id_(id), d_(std::move(d)) {}
+
+    Storehouse(Storehouse&& storehouse) = default;
+
+    Storehouse(const Storehouse &storehouse) : id_(storehouse.get_id()) {}
+
+    Storehouse& operator=(const Storehouse &storehouse) noexcept { id_ = storehouse.get_id(); return *this;}
 
     ElementID get_id() const override { return id_; }
 
@@ -149,11 +180,14 @@ public:
 
     IPackageStockpile::const_iterator end() const override { return d_->end();  }
 
-    #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
-        ReceiverType get_receiver_type() const override { return ReceiverType::STOREHOUSE; }
-    #endif
+
+    ReceiverType get_receiver_type() const override { return receiverType_; }
+
+
+    ~Storehouse() = default;
 
 private:
+    ReceiverType receiverType_ = STOREHOUSE;
     ElementID id_;
     std::unique_ptr<IPackageStockpile> d_;
 };

@@ -4,7 +4,7 @@ project(NetSim)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_compile_options(-Wall -Wextra -Werror -Wpedantic -pedantic-errors -Wconversion)
+add_compile_options(-Wall -Wextra -Werror -Wpedantic -pedantic-errors -Wconversion -Wno-error=pessimizing-move)
 
 include_directories(include)
 
@@ -22,7 +22,11 @@ set(SOURCES_FILES_TESTS
         test/test_nodes.cpp
         test/test_package.cpp
         test/test_storage_types.cpp
-        )
+        include/factory.hpp
+        src/factory.cpp
+        test/test_Factory.cpp
+        test/test_factory_io.cpp
+)
 
 add_executable(NetSim_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
 
@@ -36,4 +40,4 @@ add_subdirectory(googletest-master)
 
 target_link_libraries(NetSim_test gmock)
 
-target_compile_definitions(NetSim_test PUBLIC EXERCISE_ID=EXERCISE_ID_NODES)
+target_compile_definitions(NetSim_test PUBLIC EXERCISE_ID=EXERCISE_ID_FACTORY)
