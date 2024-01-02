@@ -148,6 +148,8 @@ public:
 
     IPackageQueue* get_queue() const { return q_.get(); }
 
+    const std::optional<Package>& get_processing_buffer() const {return bufor_; }
+
     ~Worker() = default;
 private:
     ReceiverType receiverType_ = WORKER;
@@ -183,6 +185,7 @@ public:
 
     ReceiverType get_receiver_type() const override { return receiverType_; }
 
+    IPackageStockpile* get_stockpile() const { return d_.get(); }
 
     ~Storehouse() = default;
 

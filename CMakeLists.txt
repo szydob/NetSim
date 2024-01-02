@@ -26,6 +26,12 @@ set(SOURCES_FILES_TESTS
         src/factory.cpp
         test/test_Factory.cpp
         test/test_factory_io.cpp
+        include/reports.hpp
+        src/reports.cpp
+        include/simulation.hpp
+        src/simulation.cpp
+        test/test_simulate.cpp
+        test/test_reports.cpp
 )
 
 add_executable(NetSim_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
