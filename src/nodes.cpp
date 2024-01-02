@@ -90,14 +90,26 @@ void Ramp::deliver_goods(Time t){
     }
 }
 
-void Worker::do_work(Time t){
-    if(!bufor_.has_value()){
+void Worker::do_work(Time t) {
+    if (!q_->empty() && !bufor_ ) {
         bufor_.emplace(q_->pop());
         t_ = t;
+        if (t - t_ + 1 == pd_) {
+            push_package(Package(bufor_.value().get_id()));
+            bufor_.reset();
+            if (!q_->empty()) {
+                bufor_.emplace(q_->pop());
+            }
+        }
     }
-    else if(t - t_ + 1 == pd_){
-        push_package(std::move(*bufor_));
-        bufor_.reset();
+    else{
+        if (t - t_ + 1 == pd_) {
+            push_package(Package(bufor_.value().get_id()));
+            bufor_.reset();
+            if (!q_->empty()) {
+                bufor_.emplace(q_->pop());
+            }
+        }
     }
 }
 
